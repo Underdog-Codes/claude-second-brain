@@ -53,12 +53,9 @@ After setup, open Claude Code and ask:
 
 Claude queries your `Brain/` notes and responds based on your actual project context. No context file loaded upfront. No re-explaining.
 
-![Session startup token overhead: without vs with Claude Second Brain](docs/benchmark.png)
+![Claude Second Brain token overhead savings benchmark](docs/benchmark.png)
 
-> Startup overhead only. Measured as tokens consumed before the first real prompt: CLAUDE.md + auto-loaded context files (without) vs mempalace_status + one query (with). Actual work tokens not included.
-
-<!-- Add demo.gif here once recorded -->
-<!-- ![Demo showing Claude answering from memory](docs/demo.gif) -->
+> Tokens burned on overhead - before and during your session, not counting actual responses. Session startup: files loaded before your first prompt. Fetching context: loading full files directly vs a mempalace semantic query. Typical session total: startup + 3 context fetches. Methodology in `docs/gen_benchmark.py`.
 
 ---
 
