@@ -47,13 +47,15 @@ Everything stays on your machine. No cloud. No third-party memory API. No API ke
 
 ## See it in action
 
+![Claude Second Brain](docs/logo.gif)
+
 After setup, open Claude Code and ask:
 
 > "What am I currently working on?"
 
 Claude queries your `Brain/` notes and responds based on your actual project context. No context file loaded upfront. No re-explaining.
 
-![Claude Second Brain token overhead savings benchmark](docs/benchmark.png)
+![Claude Second Brain token overhead savings benchmark](docs/benchmark.gif)
 
 > Tokens burned on overhead - before and during your session, not counting actual responses. Session startup: files loaded before your first prompt. Fetching context: loading full files directly vs a mempalace semantic query. Typical session total: startup + 3 context fetches. Methodology in `docs/gen_benchmark.py`.
 
