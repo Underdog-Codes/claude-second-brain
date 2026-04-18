@@ -20,7 +20,7 @@ Everything stays on your machine. No cloud. No third-party memory API. No API ke
 
 - Claude retains your projects, preferences, and past decisions across sessions
 - Memory scales without growing your session startup cost
-- Notes live in plain markdown. Edit them in Obsidian, VS Code, or any text editor.
+- Notes live in plain markdown. Edit them in Obsidian, VS Code, or any text editor. Claude also writes to `Brain/` automatically during sessions.
 - A pre-write hook prevents accidental context bloat in CLAUDE.md files
 - Session activity is logged automatically to `Brain/Daily/`
 - One setup command. Works on Windows, Mac, and Linux.
@@ -40,7 +40,7 @@ Everything stays on your machine. No cloud. No third-party memory API. No API ke
 
 - Not a cloud memory service. Everything is stored locally.
 - Not a replacement for CLAUDE.md. It works alongside it.
-- Not automatic. Claude uses your memory if you keep your notes up to date.
+- Not zero-maintenance. Claude writes to `Brain/` during sessions and you can write manually in Obsidian or any editor, but you need to run `mempalace mine .` after either to update the searchable index.
 - Not a plugin or extension. It is a folder template you clone and own.
 
 ---
@@ -112,13 +112,13 @@ The installer does not send any data outside your machine. It does not require A
 
 If Claude answers with your details from `identity.md`, setup is complete.
 
-After adding new notes to `Brain/`, always run:
+After any new content lands in `Brain/` - whether you wrote it manually in Obsidian or Claude wrote it during a session - run:
 
 ```bash
 mempalace mine .
 ```
 
-This updates the local index so Claude can find the new content.
+This updates the local index so Claude can find the new content in the next session.
 
 ---
 
@@ -167,16 +167,22 @@ Point Obsidian at the `Brain/` folder. Write notes normally. Run `mempalace mine
 ## How it works
 
 ```
-You write notes         Brain/Wiki/, Brain/Projects/
+You write notes (Obsidian, VS Code, any editor)
+          +
+Claude writes during sessions (new knowledge, decisions, Brain/Daily/ logs)
                                   |
-mempalace indexes them  Local vector embeddings
+                            Brain/ folder
                                   |
-Claude queries          mempalace_search returns relevant chunks
+               mempalace mine .  (run after new content lands)
                                   |
-Claude responds         Grounded in your actual notes
+                      Local vector embeddings
+                                  |
+               Claude queries via mempalace_search
+                                  |
+               Only relevant chunks returned (~300-500 tokens)
 ```
 
-The key constraint: `Brain/` is write-only for Claude. Claude never reads those files directly. It only queries through mempalace. This means startup cost stays low regardless of how many notes you have, because Claude only loads what is relevant to the current question.
+`Brain/` is write-only for Claude during reads. Claude never loads those files directly into context. It only queries through mempalace. This means startup cost stays low regardless of how many notes you have, because only what is relevant to the current question is ever retrieved.
 
 ---
 
@@ -210,13 +216,15 @@ claude-second-brain/
 
 ## Updating your memory
 
-Any time you add or edit files in `Brain/`, run:
+`Brain/` grows from two sources: you writing manually (Obsidian, VS Code, any editor) and Claude writing automatically during sessions (filing decisions, saving context, logging to `Brain/Daily/`).
+
+After either happens, run from the repo root:
 
 ```bash
 mempalace mine .
 ```
 
-Run this from the repo root folder. It re-indexes all markdown files and updates the local embeddings. Claude will have access to the new content in the next session.
+This re-indexes all markdown files and updates the local embeddings. Claude will have access to the new content in the next session.
 
 You can also re-run `setup.py` or `install.ps1` at any time. They are safe to run repeatedly.
 
@@ -224,13 +232,17 @@ You can also re-run `setup.py` or `install.ps1` at any time. They are safe to ru
 
 ## Works with Obsidian
 
-Open this folder as an Obsidian vault. No extra configuration needed. Write notes visually in `Brain/`. After adding anything, run `mempalace mine .` to update the index.
+Open this folder as an Obsidian vault. No extra configuration needed.
 
-Claude writes to `Brain/` automatically when you ask it to save something. You browse and edit in Obsidian. Neither tool steps on the other.
+Both you and Claude write to `Brain/` - you through Obsidian, Claude automatically during sessions when it files new knowledge, saves decisions, or logs activity. Run `mempalace mine .` after either to update the index.
 
 ```
-Obsidian (you write) → Brain/ files → mempalace mine → Claude queries
+You (Obsidian)  ─┐
+                  ├─→  Brain/ files  →  mempalace mine  →  Claude queries
+Claude (session) ─┘
 ```
+
+Neither tool steps on the other. You see everything Claude has written by browsing `Brain/` in Obsidian.
 
 ---
 
