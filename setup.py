@@ -22,6 +22,22 @@ print("""
 # 1. Install mempalace
 run([sys.executable, "-m", "pip", "install", "mempalace", "-q"], "1/2 Installing mempalace")
 
+# 1b. Point palace into vault root (keeps all data with the project, off the C drive)
+import json, pathlib
+palace_path = str(pathlib.Path(ROOT) / ".mempalace" / "palace").replace("\\", "/")
+config_dir = pathlib.Path.home() / ".mempalace"
+config_dir.mkdir(parents=True, exist_ok=True)
+config_file = config_dir / "config.json"
+cfg = {}
+if config_file.exists():
+    try:
+        cfg = json.loads(config_file.read_text())
+    except Exception:
+        pass
+cfg["palace_path"] = palace_path
+config_file.write_text(json.dumps(cfg, indent=2))
+print(f"\n  [1b] Palace path set to: {palace_path}")
+
 # 2. Mine the vault
 env = os.environ.copy()
 env["PYTHONUTF8"] = "1"

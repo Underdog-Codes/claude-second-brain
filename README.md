@@ -152,13 +152,19 @@ Or re-run `setup.py` / `install.ps1` - same thing.
 
 ## Works great with Obsidian
 
-Open this folder as an Obsidian vault. Write notes visually. Claude reads them through mempalace - never directly. The architecture is:
+Open this folder as an Obsidian vault right now - no extra config needed. Write notes visually in `Brain/`. After adding anything, run:
+
+```bash
+mempalace mine .
+```
+
+Claude reads your notes through mempalace - never directly. The architecture is:
 
 ```
 Obsidian (you write) → Brain/ files → mempalace mine → Claude queries
 ```
 
-Claude has write access to Brain/ so it can file new knowledge automatically. You browse it in Obsidian. Neither tool steps on the other.
+Claude has write access to Brain/ so it can file new knowledge automatically. You browse it in Obsidian. Neither tool steps on the other. The bigger your Brain/ gets, the smarter Claude gets - token cost never changes.
 
 ---
 

@@ -11,6 +11,8 @@
 8. New reference knowledge → `Brain/Wiki/<topic>.md`. New project context/decisions → `Brain/Projects/<Name>/`.
 9. New project → `Brain/Projects/<Name>/overview.md` + `project.md`. Run `mempalace mine` after.
 10. Session start → `mempalace_status` once.
+11. project.md = project list + hard rules only, 20 lines max. Overflow → Brain/Projects/<Name>/.
+12. /compact at 50K tokens - context bloat kills efficiency.
 
 ## Stack
 <!-- Add your defaults: languages, frameworks, tools -->
