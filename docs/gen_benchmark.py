@@ -1,36 +1,38 @@
 """
-Generates benchmark chart: session startup token cost over 10 sessions.
+Benchmark chart for Claude Second Brain.
 
-Without Claude Second Brain:
-  - Typical CLAUDE.md with identity, stack, rules: ~800 tokens
-  - Auto-loaded project context files: ~600 tokens
-  - Memory/notes file loaded upfront: ~400 tokens
-  - Total overhead per session: ~1800 tokens
+Three comparisons, all shown as % savings with raw token counts as secondary info:
 
-With Claude Second Brain:
-  - Trimmed CLAUDE.md (rules only, 20 lines): ~120 tokens
-  - mempalace_status on wake-up: ~170 tokens
-  - Average of 1 relevant query per session: ~400 tokens
-  - Total overhead per session: ~690 tokens
+1. STARTUP COST
+   Without: Heavy CLAUDE.md (rules + identity + stack) + auto-loaded project
+            context files + memory.md = ~1800 tokens every session
+   With:    Trimmed CLAUDE.md (20 lines, rules only) + mempalace_status = ~290 tokens
 
-These are honest estimates based on real observed values.
-The "without" baseline reflects a common setup: a 60-80 line CLAUDE.md,
-a loaded memory.md, and one or two auto-loaded project files.
+2. CONTEXT RETRIEVAL (per lookup)
+   Without: Loading full markdown files directly into context. Avg 3 files at
+            ~800 tokens each = ~2400 tokens, loaded in full whether needed or not
+   With:    mempalace query returns top 5 relevant chunks = ~400 tokens, only
+            what is relevant to the current question
+
+3. TYPICAL SESSION TOTAL OVERHEAD
+   (startup + 3 context retrievals, no actual work tokens counted)
+   Without: 1800 + (3 x 2400) = ~9000 tokens of overhead
+   With:    290  + (3 x 400)  = ~1490 tokens of overhead
+
+All numbers represent token overhead only, not the tokens used for actual work.
 """
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 
-SESSIONS = list(range(1, 11))
+# ── Data ───────────────────────────────────────────────────────────────────────
+categories = ["Startup\nOverhead", "Per Context\nRetrieval", "Typical Session\nTotal Overhead"]
 
-# Per-session startup token overhead
-WITHOUT = [1800] * 10   # flat per session, same overhead every time
-WITH    = [690]  * 10   # flat per session with Claude Second Brain
+without = [1800, 2400, 9000]
+with_   = [290,  400,  1490]
 
-# Cumulative
-cum_without = np.cumsum(WITHOUT)
-cum_with    = np.cumsum(WITH)
+savings_pct = [round((1 - w / wo) * 100) for wo, w in zip(without, with_)]
 
 # ── Style ──────────────────────────────────────────────────────────────────────
 BG      = "#0d1117"
@@ -40,79 +42,75 @@ GREEN   = "#3fb950"
 GRID    = "#21262d"
 TEXT    = "#e6edf3"
 SUBTEXT = "#8b949e"
+RED     = "#f85149"
 
-fig, axes = plt.subplots(1, 2, figsize=(14, 6), facecolor=BG)
-fig.suptitle(
-    "Claude Second Brain  —  Session Startup Token Overhead",
-    color=TEXT, fontsize=15, fontweight="bold", y=1.01
-)
-
-# ── Left: per-session bars ─────────────────────────────────────────────────────
-ax1 = axes[0]
-ax1.set_facecolor(PANEL)
-ax1.tick_params(colors=SUBTEXT)
-for spine in ax1.spines.values():
+fig, ax = plt.subplots(figsize=(13, 7), facecolor=BG)
+ax.set_facecolor(PANEL)
+for spine in ax.spines.values():
     spine.set_edgecolor(GRID)
 
-x = np.arange(len(SESSIONS))
-w = 0.35
-ax1.bar(x - w/2, WITHOUT, w, label=f"Without  ({WITHOUT[0]:,} tokens/session)", color=BLUE,  alpha=0.85)
-ax1.bar(x + w/2, WITH,    w, label=f"With CSS ({WITH[0]:,} tokens/session)",    color=GREEN, alpha=0.85)
+x   = np.arange(len(categories))
+w   = 0.32
+gap = 0.04
 
-ax1.set_xticks(x)
-ax1.set_xticklabels([f"S{s}" for s in SESSIONS], color=SUBTEXT, fontsize=9)
-ax1.set_ylabel("Startup Tokens", color=SUBTEXT)
-ax1.set_title("Per Session", color=TEXT, fontsize=12, pad=10)
-ax1.yaxis.label.set_color(SUBTEXT)
-ax1.tick_params(axis="y", colors=SUBTEXT)
-ax1.grid(axis="y", color=GRID, linewidth=0.6)
-ax1.legend(facecolor=PANEL, edgecolor=GRID, labelcolor=TEXT, fontsize=9)
+bars_wo = ax.bar(x - w/2 - gap/2, without, w,
+                 color=BLUE,  alpha=0.85, label="Without Claude Second Brain")
+bars_wi = ax.bar(x + w/2 + gap/2, with_,   w,
+                 color=GREEN, alpha=0.85, label="With Claude Second Brain")
 
-saving = round((1 - WITH[0] / WITHOUT[0]) * 100)
-ax1.annotate(
-    f"{saving}% less overhead per session",
-    xy=(0.5, 0.05), xycoords="axes fraction",
-    ha="center", color=GREEN, fontsize=10, fontstyle="italic"
-)
+# ── Raw token labels on bars ───────────────────────────────────────────────────
+for bar, val in zip(bars_wo, without):
+    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 60,
+            f"{val:,}", ha="center", va="bottom", color=BLUE,
+            fontsize=10, fontweight="bold")
 
-# ── Right: cumulative line ─────────────────────────────────────────────────────
-ax2 = axes[1]
-ax2.set_facecolor(PANEL)
-ax2.tick_params(colors=SUBTEXT)
-for spine in ax2.spines.values():
-    spine.set_edgecolor(GRID)
+for bar, val in zip(bars_wi, with_):
+    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 60,
+            f"{val:,}", ha="center", va="bottom", color=GREEN,
+            fontsize=10, fontweight="bold")
 
-ax2.fill_between(SESSIONS, cum_without, cum_with, alpha=0.12, color=BLUE)
-ax2.plot(SESSIONS, cum_without, "o-", color=BLUE,  linewidth=2,
-         label=f"Without  ({cum_without[-1]:,} tokens total)", markersize=5)
-ax2.plot(SESSIONS, cum_with,    "^-", color=GREEN, linewidth=2,
-         label=f"With CSS ({cum_with[-1]:,} tokens total)",    markersize=5)
+# ── % savings badges centred between each pair ─────────────────────────────────
+for i, pct in enumerate(savings_pct):
+    mid_x  = x[i]
+    mid_y  = max(without[i], with_[i]) * 0.52
+    label  = f"{pct}% less"
+    ax.text(mid_x, mid_y, label,
+            ha="center", va="center", color="white",
+            fontsize=13, fontweight="bold",
+            bbox=dict(boxstyle="round,pad=0.4", facecolor=RED,
+                      edgecolor="none", alpha=0.88))
 
-ax2.set_xticks(SESSIONS)
-ax2.set_xticklabels([f"S{s}" for s in SESSIONS], color=SUBTEXT, fontsize=9)
-ax2.set_ylabel("Cumulative Startup Tokens", color=SUBTEXT)
-ax2.set_title("Cumulative Over 10 Sessions", color=TEXT, fontsize=12, pad=10)
-ax2.yaxis.label.set_color(SUBTEXT)
-ax2.tick_params(axis="y", colors=SUBTEXT)
-ax2.grid(color=GRID, linewidth=0.6)
-ax2.legend(facecolor=PANEL, edgecolor=GRID, labelcolor=TEXT, fontsize=9)
+# ── Axes ───────────────────────────────────────────────────────────────────────
+ax.set_xticks(x)
+ax.set_xticklabels(categories, color=TEXT, fontsize=12)
+ax.set_ylabel("Tokens (overhead only)", color=SUBTEXT, fontsize=11)
+ax.tick_params(axis="y", colors=SUBTEXT)
+ax.yaxis.label.set_color(SUBTEXT)
+ax.grid(axis="y", color=GRID, linewidth=0.7, zorder=0)
+ax.set_ylim(0, max(without) * 1.22)
 
-saved_tokens = int(cum_without[-1] - cum_with[-1])
-ax2.annotate(
-    f"{saved_tokens:,} tokens saved over 10 sessions",
-    xy=(0.5, 0.90), xycoords="axes fraction",
-    ha="center", color=GREEN, fontsize=10, fontstyle="italic"
-)
+# ── Legend ─────────────────────────────────────────────────────────────────────
+legend = ax.legend(facecolor=PANEL, edgecolor=GRID, labelcolor=TEXT,
+                   fontsize=10, loc="upper right")
 
-# ── Footer note ────────────────────────────────────────────────────────────────
+# ── Title + subtitle ───────────────────────────────────────────────────────────
+fig.text(0.5, 1.01,
+         "Claude Second Brain  —  Token Overhead Savings",
+         ha="center", color=TEXT, fontsize=16, fontweight="bold")
+fig.text(0.5, 0.96,
+         "Startup overhead + context retrieval. Actual work tokens not included.",
+         ha="center", color=SUBTEXT, fontsize=10)
+
+# ── Footer methodology note ────────────────────────────────────────────────────
 fig.text(
-    0.5, -0.03,
-    "Startup overhead only (CLAUDE.md load + context files vs mempalace_status + one query)."
-    "  Actual work tokens not included.",
-    ha="center", color=SUBTEXT, fontsize=8
+    0.5, -0.04,
+    "Without: heavy CLAUDE.md (identity+stack+rules) + auto-loaded context files + memory.md  |  "
+    "With: 20-line CLAUDE.md + mempalace_status on wake-up + semantic query returning top 5 chunks",
+    ha="center", color=SUBTEXT, fontsize=8, wrap=True
 )
 
 plt.tight_layout()
 out = "docs/benchmark.png"
 plt.savefig(out, dpi=150, bbox_inches="tight", facecolor=BG)
 print(f"Saved: {out}")
+print(f"Savings: {savings_pct[0]}% startup | {savings_pct[1]}% per retrieval | {savings_pct[2]}% session total")
