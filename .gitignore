@@ -1,0 +1,8 @@
+Brain/Daily/
+Brain/Areas/
+*.db
+*.sqlite
+secrets/
+.env
+__pycache__/
+*.pyc
