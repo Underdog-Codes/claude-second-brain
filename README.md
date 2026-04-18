@@ -1,5 +1,7 @@
 # Claude Second Brain
 
+![Claude Second Brain](docs/logo.gif)
+
 > Persistent local memory for Claude Code. Stop re-explaining your projects every session.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -46,8 +48,6 @@ Everything stays on your machine. No cloud. No third-party memory API. No API ke
 ---
 
 ## See it in action
-
-![Claude Second Brain](docs/logo.gif)
 
 After setup, open Claude Code and ask:
 
