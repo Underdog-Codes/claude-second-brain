@@ -1,4 +1,4 @@
-# 🧠 Claude Brain Template
+# 🧠 Claude Second Brain Template
 
 > Give Claude permanent memory, zero token bloat, and a local second brain - in one setup.
 
