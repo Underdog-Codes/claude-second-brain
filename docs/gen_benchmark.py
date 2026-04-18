@@ -27,7 +27,11 @@ import matplotlib.patches as mpatches
 import numpy as np
 
 # ── Data ───────────────────────────────────────────────────────────────────────
-categories = ["Startup\nOverhead", "Per Context\nRetrieval", "Typical Session\nTotal Overhead"]
+categories = [
+    "Session Startup\n(files loaded before 1st prompt)",
+    "Fetching Context\n(loading files vs mempalace query)",
+    "Typical Session Total\n(startup + 3 context fetches)"
+]
 
 without = [1800, 2400, 9000]
 with_   = [290,  400,  1490]
@@ -98,7 +102,7 @@ fig.text(0.5, 1.01,
          "Claude Second Brain  —  Token Overhead Savings",
          ha="center", color=TEXT, fontsize=16, fontweight="bold")
 fig.text(0.5, 0.96,
-         "Startup overhead + context retrieval. Actual work tokens not included.",
+         "Tokens burned on overhead — before and during your session, not counting actual responses",
          ha="center", color=SUBTEXT, fontsize=10)
 
 # ── Footer methodology note ────────────────────────────────────────────────────
