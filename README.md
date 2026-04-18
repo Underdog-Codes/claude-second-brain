@@ -1,6 +1,6 @@
 # 🧠 Claude Brain Template
 
-> Give Claude permanent memory, zero token bloat, and a local second brain — in one setup.
+> Give Claude permanent memory, zero token bloat, and a local second brain - in one setup.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![mempalace](https://img.shields.io/badge/powered%20by-mempalace-blue)](https://github.com/milla-jovovich/mempalace)
@@ -10,13 +10,13 @@
 
 ## The Problem
 
-Every Claude session starts blank. You re-explain your stack, your preferences, your projects — every time. And the more context you load upfront, the more tokens you burn before you type a single word.
+Every Claude session starts blank. You re-explain your stack, your preferences, your projects - every time. And the more context you load upfront, the more tokens you burn before you type a single word.
 
 Most setups "fix" this by loading big CLAUDE.md files and markdown notes at session start. That's just trading one problem for another.
 
 ## The Solution
 
-This template wires Claude to a **local vector memory system** ([mempalace](https://github.com/milla-jovovich/mempalace)). Instead of loading everything upfront, Claude queries only what's relevant — on demand.
+This template wires Claude to a **local vector memory system** ([mempalace](https://github.com/milla-jovovich/mempalace)). Instead of loading everything upfront, Claude queries only what's relevant - on demand.
 
 ```
 Session startup:  ~170 tokens (fixed, forever)
@@ -30,13 +30,13 @@ You write notes in plain markdown. Claude reads them semantically. Your token co
 
 ## Features
 
-- **Permanent memory** — Claude remembers decisions, preferences, and context across all sessions
-- **Flat token cost** — 170 tokens on startup no matter how big your knowledge base grows
-- **100% local** — everything stays on your machine, no cloud, no API keys for memory
-- **Auto-protection** — a hook blocks accidental writes to auto-loading files
-- **Session logging** — every session end is logged to `Brain/Daily/` automatically
-- **Clean structure** — opinionated folder layout that scales without becoming a mess
-- **One-command setup** — Python + mempalace + vault indexing in a single step
+- **Permanent memory** - Claude remembers decisions, preferences, and context across all sessions
+- **Flat token cost** - 170 tokens on startup no matter how big your knowledge base grows
+- **100% local** - everything stays on your machine, no cloud, no API keys for memory
+- **Auto-protection** - a hook blocks accidental writes to auto-loading files
+- **Session logging** - every session end is logged to `Brain/Daily/` automatically
+- **Clean structure** - opinionated folder layout that scales without becoming a mess
+- **One-command setup** - Python + mempalace + vault indexing in a single step
 
 ---
 
@@ -52,19 +52,19 @@ Claude queries        →   mempalace_search returns top 5 relevant chunks
 Claude responds       →   Grounded in your actual knowledge
 ```
 
-Your Obsidian vault (optional) writes to `Brain/`. Claude never reads it directly — only through mempalace. The bigger your brain gets, the smarter Claude gets. Token cost never changes.
+Your Obsidian vault (optional) writes to `Brain/`. Claude never reads it directly - only through mempalace. The bigger your brain gets, the smarter Claude gets. Token cost never changes.
 
 ---
 
 ## Prerequisites
 
-**[Claude Code](https://claude.ai/download)** — install this manually. That's the only prerequisite you handle yourself.
+**[Claude Code](https://claude.ai/download)** - install this manually. That's the only prerequisite you handle yourself.
 
 ---
 
 ## Setup
 
-**Windows 11** — right-click `install.ps1` → Run with PowerShell
+**Windows 11** - right-click `install.ps1` → Run with PowerShell
 
 **Mac / Linux:**
 ```bash
@@ -80,7 +80,7 @@ Both install mempalace and index your vault automatically.
 1. Open this folder in Claude Code
 2. Fill in `Brain/identity.md` with your name, role, and stack
 3. Add your stack to `CLAUDE.md` under `## Stack`
-4. Start a new session — Claude will call `mempalace_status` automatically
+4. Start a new session - Claude will call `mempalace_status` automatically
 
 ---
 
@@ -117,7 +117,7 @@ Every project CLAUDE.md is a single immutable line:
 > DO NOT EDIT. Query mempalace for all project context. Never read files directly.
 ```
 
-A pre-write hook enforces this — if anything tries to write more than 1 line to a CLAUDE.md, it's blocked with an explanation. Same for any new root-level `.md` files.
+A pre-write hook enforces this - if anything tries to write more than 1 line to a CLAUDE.md, it's blocked with an explanation. Same for any new root-level `.md` files.
 
 `project.md` files have a 20-line cap. Overflow goes to `Brain/Projects/<Name>/` and gets mined into mempalace. Context stays lean. Memory stays rich.
 
@@ -146,13 +146,13 @@ Any time you add or edit files in `Brain/`:
 mempalace mine .
 ```
 
-Or re-run `setup.py` / `install.ps1` — same thing.
+Or re-run `setup.py` / `install.ps1` - same thing.
 
 ---
 
 ## Works great with Obsidian
 
-Open this folder as an Obsidian vault. Write notes visually. Claude reads them through mempalace — never directly. The architecture is:
+Open this folder as an Obsidian vault. Write notes visually. Claude reads them through mempalace - never directly. The architecture is:
 
 ```
 Obsidian (you write) → Brain/ files → mempalace mine → Claude queries
@@ -165,12 +165,12 @@ Claude has write access to Brain/ so it can file new knowledge automatically. Yo
 ## Credits
 
 Architecture inspired by:
-- [Andrej Karpathy's LLM coding principles](https://github.com/forrestchang/andrej-karpathy-skills) — simplicity first, surgical changes
-- [mempalace](https://github.com/milla-jovovich/mempalace) — local vector memory for AI agents
+- [Andrej Karpathy's LLM coding principles](https://github.com/forrestchang/andrej-karpathy-skills) - simplicity first, surgical changes
+- [mempalace](https://github.com/milla-jovovich/mempalace) - local vector memory for AI agents
 - [Anthropic Claude Code best practices](https://code.claude.com/docs/en/best-practices)
 
 ---
 
 ## License
 
-MIT — use it, fork it, build on it.
+MIT - use it, fork it, build on it.

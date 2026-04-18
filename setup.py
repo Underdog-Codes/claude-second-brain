@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude Brain Template — Setup
+Claude Brain Template - Setup
 Works on Windows, Mac, and Linux.
 """
 import subprocess, sys, os
@@ -15,7 +15,7 @@ def run(cmd, label):
         sys.exit(1)
 
 print("""
-  Claude Brain Template — Setup
+  Claude Brain Template - Setup
   ==============================
 """)
 
