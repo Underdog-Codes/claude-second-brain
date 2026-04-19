@@ -114,10 +114,12 @@ If Claude answers with your details from `identity.md`, setup is complete.
 After any new content lands in `Brain/` - whether you wrote it manually in Obsidian or Claude wrote it during a session - run:
 
 ```bash
-mempalace mine .
+python -m mempalace mine .
 ```
 
 This updates the local index so Claude can find the new content in the next session.
+
+> **Windows tip:** use `python -m mempalace mine .` instead of bare `mempalace mine .` to avoid PATH issues.
 
 ---
 
@@ -220,7 +222,7 @@ claude-second-brain/
 After either happens, run from the repo root:
 
 ```bash
-mempalace mine .
+python -m mempalace mine .
 ```
 
 This re-indexes all markdown files and updates the local embeddings. Claude will have access to the new content in the next session.

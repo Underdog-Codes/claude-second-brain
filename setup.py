@@ -42,13 +42,10 @@ print(f"\n  [1b] Palace path set to: {palace_path}")
 env = os.environ.copy()
 env["PYTHONUTF8"] = "1"
 print("\n  [2/2] Indexing your vault into memory...")
-result = subprocess.run(["mempalace", "mine", ROOT], cwd=ROOT, env=env)
+result = subprocess.run([sys.executable, "-m", "mempalace", "mine", ROOT], cwd=ROOT, env=env)
 if result.returncode != 0:
-    # fallback: run as python module
-    result = subprocess.run([sys.executable, "-m", "mempalace", "mine", ROOT], cwd=ROOT, env=env)
-    if result.returncode != 0:
-        print("\n  ERROR: Mining failed.")
-        sys.exit(1)
+    print("\n  ERROR: Mining failed.")
+    sys.exit(1)
 
 print("""
   Done!
