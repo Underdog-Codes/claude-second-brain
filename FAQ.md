@@ -16,13 +16,13 @@ No. The vector index is stored locally in `.mempalace/palace/` inside your repo 
 
 No additional API keys beyond what Claude Code already uses. The memory system is fully local.
 
-**What happens if I edit Brain/ without running `mempalace mine .`?**
+**What happens if I edit Brain/ without running `python -m mempalace mine .`?**
 
-Claude will not see the new content. The index only updates when you run `mempalace mine .`. Your file is saved, but the searchable embeddings are not updated until you re-index.
+Claude will not see the new content. The index only updates when you run `python -m mempalace mine .`. Your file is saved, but the searchable embeddings are not updated until you re-index.
 
 **Can I use this with multiple projects?**
 
-Yes. Add each project under `Projects/<name>/` with its own `CLAUDE.md` (one line) and `project.md`. Add project context notes to `Brain/Projects/<name>/`. Run `mempalace mine .` after.
+Yes. Add each project under `Projects/<name>/` with its own `CLAUDE.md` (one line) and `project.md`. Add project context notes to `Brain/Projects/<name>/`. Run `python -m mempalace mine .` after.
 
 **Will this work on Mac or Linux?**
 
@@ -34,7 +34,7 @@ Roughly 5-10MB per 1,000 notes depending on content length. A typical setup with
 
 **Can I delete `.mempalace/palace/` and start over?**
 
-Yes. Delete the folder and run `mempalace mine .` to rebuild from scratch. You will not lose any source files in `Brain/`.
+Yes. Delete the folder and run `python -m mempalace mine .` to rebuild from scratch. You will not lose any source files in `Brain/`.
 
 **Why is CLAUDE.md in each project folder just one line?**
 
@@ -42,12 +42,12 @@ Claude Code auto-loads every CLAUDE.md it finds in the project hierarchy at sess
 
 **Can I add my own rooms to mempalace.yaml?**
 
-Yes. Open `mempalace.yaml` and add a new entry under `rooms:` with a name, description, and keywords. Run `mempalace mine .` after. Claude will use the new category when searching.
+Yes. Open `mempalace.yaml` and add a new entry under `rooms:` with a name, description, and keywords. Run `python -m mempalace mine .` after. Claude will use the new category when searching.
 
 **What is the `guard-autoload.py` hook doing?**
 
 It intercepts writes before they happen and blocks two things: writing more than one line to any CLAUDE.md file in the project, and creating new .md files at the repo root level. Both of those actions can cause unintended context to auto-load at session start. The guard prevents accidental token bloat.
 
-**Do I need to run `mempalace mine .` every session?**
+**Do I need to run `python -m mempalace mine .` every session?**
 
 No, only when you add or change files in `Brain/`. The index persists between sessions. If you have not changed anything, the existing index is still valid.

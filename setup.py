@@ -38,17 +38,31 @@ cfg["palace_path"] = palace_path
 config_file.write_text(json.dumps(cfg, indent=2))
 print(f"\n  [1b] Palace path set to: {palace_path}")
 
+# 1c. Write .mcp.json so Claude Code can find the mempalace MCP server
+mcp_file = pathlib.Path(ROOT) / ".mcp.json"
+mcp_cfg = {}
+if mcp_file.exists():
+    try:
+        mcp_cfg = json.loads(mcp_file.read_text())
+    except Exception:
+        pass
+mcp_cfg.setdefault("mcpServers", {})["mempalace"] = {
+    "type": "stdio",
+    "command": "python",
+    "args": ["-m", "mempalace.mcp_server"],
+    "env": {}
+}
+mcp_file.write_text(json.dumps(mcp_cfg, indent=2))
+print(f"\n  [1c] MCP server wired: {mcp_file}")
+
 # 2. Mine the vault
 env = os.environ.copy()
 env["PYTHONUTF8"] = "1"
 print("\n  [2/2] Indexing your vault into memory...")
-result = subprocess.run(["mempalace", "mine", ROOT], cwd=ROOT, env=env)
+result = subprocess.run([sys.executable, "-m", "mempalace", "mine", ROOT], cwd=ROOT, env=env)
 if result.returncode != 0:
-    # fallback: run as python module
-    result = subprocess.run([sys.executable, "-m", "mempalace", "mine", ROOT], cwd=ROOT, env=env)
-    if result.returncode != 0:
-        print("\n  ERROR: Mining failed.")
-        sys.exit(1)
+    print("\n  ERROR: Mining failed.")
+    sys.exit(1)
 
 print("""
   Done!

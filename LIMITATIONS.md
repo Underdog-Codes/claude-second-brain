@@ -8,7 +8,7 @@ Claude retrieves what is in `Brain/`. If your notes are vague, incomplete, or ou
 
 ## No auto-sync
 
-After adding or editing files in `Brain/`, you must run `mempalace mine .` manually. There is no background watcher or automatic re-indexing. If you forget, Claude will not see the new content.
+After adding or editing files in `Brain/`, you must run `python -m mempalace mine .` manually. There is no background watcher or automatic re-indexing. If you forget, Claude will not see the new content.
 
 ## Search is semantic, not exact
 

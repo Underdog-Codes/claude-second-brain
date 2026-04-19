@@ -1,0 +1,6 @@
+{
+  "title": "Fix Windows setup: PATH issue and missing MCP server config",
+  "head": "fix/windows-path-setup",
+  "base": "main",
+  "body": "## Summary\n\n- `setup.py` called `mempalace` as a bare command — on Windows this raises `FileNotFoundError` (not a non-zero exit code), so the fallback never triggered. Now always uses `python -m mempalace mine` directly.\n- Added `.mcp.json` to the repo root so Claude Code finds `mempalace_search` and other tools on first open. Without this, Claude says \"I do not have access to a mempalace_search tool.\"\n- `setup.py` also writes `.mcp.json` during install as a safety net.\n- Updated `README.md`, `FAQ.md`, and `LIMITATIONS.md` to show `python -m mempalace mine .` in all user-facing commands.\n\n## Test plan\n\n- [ ] Fresh clone on Windows where Scripts/ is not on PATH — `python setup.py` completes without error\n- [ ] Open folder in Claude Code after setup — `mempalace_search` tool is available\n- [ ] `python -m mempalace mine .` in docs is copy-pasteable and works on Windows, Mac, Linux"
+}
